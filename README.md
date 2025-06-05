@@ -57,17 +57,37 @@ intsall via pod file
 
 run "pod install"
 
-add to Header Search Paths for debug and releas
+add to Header Search Paths for debug and release
+    
     $(inherited)
+
 use the newly created .xcworkspace file for further proceed in xcode
 
-add to info.plist
-    <key>GADApplicationIdentifier</key>
-    <string>ca-app-pub-3940256099942544~1458002511</string>
 
-copy adController.h & adController.m to project
-
-add gemaceenter in "Signing & Capabilits" tab
-add gemekit in "General" tab under Frameworks,Libraries
+- copy idValues.xml to project folder
+- copy adController.h & adController.m to project (includes adMob)
+- add gemaceenter in "Signing & Capabilits" tab
+- add gemekit in "General" tab under Frameworks,Libraries
 
 ## Use in CocosCreator
+Call function in any script
+
+    NativeBridge.showBanner();
+
+Available functions
+        
+    requestConsent()
+    showBanner()
+    hideBanner()
+    requestReview()
+    showLeaderboard()
+    submitScore(int:score)
+    interstitialAvailable() //return true or false
+    showInterstitial()
+    rewardVideoAvailable() //return true or false
+    showRewardVideo()
+
+Available callbacks
+
+    cc.systemEvent.on('interstitial-ad-closed', function () {})
+    cc.systemEvent.on('rewardVideo-ad-closed', function () {})
