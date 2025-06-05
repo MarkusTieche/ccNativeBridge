@@ -4,7 +4,7 @@ Easy to configure and enhance.
 
 ## How it works
 
-## Steps
+## Preparation
 Set up a proper android leaderboard with oAuth2 key in https://console.cloud.google.com/. For Google play services to work. 
 
 ## ANDROID
