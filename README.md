@@ -1,36 +1,24 @@
 # CC2 NativeBridge
-A Native helper for CocosCreater 2.4+. Implementation of AdMob,GameAnalytics,GameCenter,AppRating,ConsentRequest etc.
+A Native helper for CocosCreater 2.4+. Implementation of AdMob,GameCenter,AppRating,ConsentRequest etc.
 Easy to configure and enhance.
 
-## How it works
-
-## Preparation
-Set up a proper android leaderboard with oAuth2 key in https://console.cloud.google.com/. For Google play services to work. 
-
 ## ANDROID
-Copy the files from Android Folder to your Android build Folder. Dont just overwrite the folder in your Android project. Copy the single files.
+### Preparation
+Set up a proper android leaderboard with oAuth2 key in https://console.cloud.google.com/ For Google play services to work. 
 
-Add to AppActivity.java in the onCreate function
+### Implement
+Set/Update in gradle.properties
 
-    //IMPLEMENT ADCONTROLLER
-    adController adcontroller = new adController(this,mFrameLayout);
-    //IMPLEMENT REVIEW
-    appRating apprating = new appRating(this);
-    //GAMECENTER
-    gameCenter gameCenter = new gameCenter(this);
+    PROP_MIN_SDK_VERSION=23
 
-Add to Android Manifest
-
-     <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
-    <meta-data
-        android:name="com.google.android.gms.ads.APPLICATION_ID"
-        android:value="ca-app-pub-3940256099942544~3347511713"/>
-
-    <meta-data 
-        android:name="com.google.android.gms.games.APP_ID"
-        android:value="21388063390"/>
+Add to gradle.properties
+    
+    #NECESSARY FOR ADMOB
+    android.useAndroidX=true
+    android.enableJetifier=true
 
 Add to build.gradle dependencies
+    
     //ADMOB
     implementation("com.google.android.gms:play-services-ads:24.3.0")
     implementation("com.google.android.ump:user-messaging-platform:3.1.0")
@@ -41,33 +29,75 @@ Add to build.gradle dependencies
     //GOOGLE PLAY SERVICE
     implementation "com.google.android.gms:play-services-games-v2:+"
 
-Set PROP_MIN_SDK_VERSION=23 in gradle.properties
-Add to gradle.properties
-    
-    #NECESSARY FOR ADMOB
-    android.useAndroidX=true
-    android.enableJetifier=true
+Add to Android Manifest inside "application" tag
+
+     <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
+    <meta-data
+        android:name="com.google.android.gms.ads.APPLICATION_ID"
+        android:value="@string/admobAppId"/>
+
+    <meta-data 
+        android:name="com.google.android.gms.games.APP_ID"
+        android:value="@string/app_id"/>
+
+Copy Files
+
+    Copy idValue.xml to the res/values (Update values for your app / Set AdBanner size)
+    Copy adController.java to app/src/org/cocos2dx/javascript //Admob
+    Copy appRating.java to app/src/org/cocos2dx/javascript //AppRating
+    Copy gameCenter.java to app/src/org/cocos2dx/javascript //Gamecenter/Leaderboard
+
+
+Add to AppActivity.java in the onCreate function
+
+    //IMPLEMENT ADCONTROLLER/Admob
+    adController adcontroller = new adController(this,mFrameLayout);
+    //IMPLEMENT GAMECENTER
+    gameCenter.initialize(this);
+
 
 ## iOs
-add cocoapods to the project
-run "pod init" in xcode project folder
-intsall via pod file
-  - pod 'Google-Mobile-Ads-SDK'
-  - pod 'GoogleUserMessagingPlatform'
+### Preparation
+Set up a cocoaPods on your system 
+
+### Implement
+Add cocoapods to the project. Run "pod init" in xcode project folder.
+
+Add to "Podfile" file
+    
+    pod 'Google-Mobile-Ads-SDK'
+    pod 'GoogleUserMessagingPlatform'
 
 run "pod install"
 
-add to Header Search Paths for debug and release
+! Use the newly created .xcworkspace file for further proceed in xcode
+
+Add to "Buildsettings/Header Search Paths" for debug and release
     
     $(inherited)
 
-use the newly created .xcworkspace file for further proceed in xcode
+Change "Project/Info" Based on Configuration File to PodsFile
+
+Update your app's Info.plist file to add two keys:
+    
+    <key>GADApplicationIdentifier</key>
+        <string>ca-app-pub-3940256099942544~1458002511</string>
+    <key>SKAdNetworkItems</key>
+    <array>
+        <dict>
+            <key>SKAdNetworkIdentifier</key>
+            <string>cstr6suwn9.skadnetwork</string>
+        </dict>
+    </array>
+https://developers.google.com/admob/ios/quick-start
 
 
-- copy idValues.xml to project folder
-- copy adController.h & adController.m to project (includes adMob)
-- add gemaceenter in "Signing & Capabilits" tab
-- add gemekit in "General" tab under Frameworks,Libraries
+Copy Files
+    Copy idValues.xml to project folder
+    Copy adController.h & adController.m to project (includes adMob)
+    
+    add gemaceenter in "Signing & Capabilits" tab
+    add gemekit in "General" tab under Frameworks,Libraries
 
 ## Use in CocosCreator
 Call function in any script

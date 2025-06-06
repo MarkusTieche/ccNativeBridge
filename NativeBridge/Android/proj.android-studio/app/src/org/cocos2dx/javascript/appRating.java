@@ -25,8 +25,8 @@ public class appRating {
         }
 
         ReviewManager manager = ReviewManagerFactory.create(activity);
-        //ReviewManager manager = new FakeReviewManager(activity);
-        com.google.android.gms.tasks.Task<ReviewInfo> request = manager.requestReviewFlow();
+        //ReviewManager manager = new FakeReviewManager(activity); //DEBUG
+        Task<ReviewInfo> request = manager.requestReviewFlow();
 
         request.addOnCompleteListener(task -> {
             if (task.isSuccessful()) {

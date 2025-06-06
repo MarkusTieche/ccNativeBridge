@@ -8,6 +8,7 @@ import com.google.android.gms.games.PlayGames;
 import com.google.android.gms.games.PlayGamesSdk;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.inkfood.test.R;
 
 public class gameCenter {
 
@@ -50,15 +51,15 @@ public class gameCenter {
                 .isAuthenticated();
     }
 
-    public static void submitScore(String leaderboardId, long score) {
+    public static void submitScore(long score) {
         PlayGames.getLeaderboardsClient(activity)
-                .submitScore(leaderboardId, score);
-        Log.d(TAG, "Submitted score: " + score + " to leaderboard: " + leaderboardId);
+                .submitScore(activity.getString(R.string.leaderboard_id), score);
+        Log.d(TAG, "Submitted score: " + score + " to leaderboard: " + activity.getString(R.string.leaderboard_id));
     }
 
-    public static void showLeaderboard(String leaderboardId) {
+    public static void showLeaderboard() {
         PlayGames.getLeaderboardsClient(activity)
-                .getLeaderboardIntent(leaderboardId)
+                .getLeaderboardIntent(activity.getString(R.string.leaderboard_id))
                 .addOnSuccessListener(new OnSuccessListener<Intent>() {
                     @Override
                     public void onSuccess(Intent intent) {

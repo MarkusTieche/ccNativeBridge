@@ -1,5 +1,7 @@
 package org.cocos2dx.javascript;
 
+import static android.provider.Settings.System.getString;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,6 +28,7 @@ import com.google.android.ump.ConsentInformation;
 import com.google.android.ump.ConsentRequestParameters;
 import com.google.android.ump.FormError;
 import com.google.android.ump.UserMessagingPlatform;
+import com.inkfood.test.R;
 
 import org.cocos2dx.lib.Cocos2dxHelper;
 import org.cocos2dx.lib.Cocos2dxJavascriptJavaBridge;
@@ -168,8 +171,8 @@ public class adController {
     public void loadBannerAd(boolean personalized) {
         if (bannerAdView == null) {
             bannerAdView = new AdView(activity);
-            bannerAdView.setAdSize(AdSize.BANNER);
-            bannerAdView.setAdUnitId("ca-app-pub-3940256099942544/9214589741");
+            bannerAdView.setAdSize(getAdSizeByName(activity.getString(R.string.banner_size)));
+            bannerAdView.setAdUnitId(activity.getString(R.string.banner_ad_unit_id));
 
 
             adContainer.addView(bannerAdView, new FrameLayout.LayoutParams(
@@ -180,6 +183,33 @@ public class adController {
         }
 
         bannerAdView.loadAd(buildAdRequest(personalized));
+    }
+
+    public static AdSize getAdSizeByName(String name) {
+        if (name == null) return null;
+
+        switch (name.toUpperCase()) {
+            case "BANNER":
+                return AdSize.BANNER; // 320x50
+            case "LARGE_BANNER":
+                return AdSize.LARGE_BANNER; // 320x100
+            case "FULL_BANNER":
+                return AdSize.FULL_BANNER; // 468x60
+            case "LEADERBOARD":
+                return AdSize.LEADERBOARD; // 728x90
+            case "MEDIUM_RECTANGLE":
+                return AdSize.MEDIUM_RECTANGLE; // 300x250
+            case "SMART_BANNER": // Deprecated but still works
+                return AdSize.SMART_BANNER;
+            case "WIDE_SKYSCRAPER":
+                return AdSize.WIDE_SKYSCRAPER; // 160x600
+            case "FLUID":
+                return AdSize.FLUID;
+            case "ADAPTIVE":
+                return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(activity, 360);
+            default:
+                return null; // Unknown or unsupported size
+        }
     }
 
     public static void showBanner() {
@@ -211,7 +241,7 @@ public class adController {
     }
 
     public void loadInterstitialAd(boolean personalized) {
-        InterstitialAd.load(activity, "ca-app-pub-3940256099942544/1033173712", buildAdRequest(personalized),
+        InterstitialAd.load(activity, activity.getString(R.string.interstitial_ad_unit_id), buildAdRequest(personalized),
                 new InterstitialAdLoadCallback() {
                     @Override
                     public void onAdLoaded(@NonNull InterstitialAd ad) {
@@ -263,7 +293,7 @@ public class adController {
     }
 
     public void loadRewardedAd(boolean personalized) {
-        RewardedAd.load(activity, "ca-app-pub-3940256099942544/5224354917", buildAdRequest(personalized),
+        RewardedAd.load(activity, activity.getString(R.string.rewarded_ad_unit_id), buildAdRequest(personalized),
                 new RewardedAdLoadCallback() {
                     @Override
                     public void onAdLoaded(@NonNull RewardedAd ad) {

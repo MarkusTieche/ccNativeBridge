@@ -31,6 +31,7 @@ import android.os.Bundle;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.view.WindowManager;
 
 public class AppActivity extends Cocos2dxActivity {
 
@@ -40,10 +41,11 @@ public class AppActivity extends Cocos2dxActivity {
         // DO OTHER INITIALIZATION BELOW
         SDKWrapper.getInstance().init(this);
 
-        //ADCONTROLLER
-        adController adCtrl = new adController(this, mFrameLayout);
-        gameCenter.initialize(this);
+        //IMPLEMENT ADCONTROLLER/Admob
+        adController adcontroller = new adController(this,mFrameLayout);
 
+        //IMPLEMENT GAMECENTER
+        gameCenter.initialize(this);
 
     }
 

@@ -1,0 +1,10 @@
+<resources>
+    <string name="admobAppId" translatable="false">ca-app-pub-3940256099942544~3347511713</string>
+    <string name="banner_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/9214589741</string>
+    <string name="banner_size" translatable="false">ADAPTIVE</string><!--BANNER/LARGE_BANNER/FULL_BANNER/LEADERBOARD/MEDIUM_RECTANGLE/SMART_BANNER/WIDE_SKYSCRAPER/FLUID/ADAPTIVE-->
+    <string name="interstitial_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="rewarded_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/5224354917</string>
+    <string name="app_id" translatable="false">21388063390</string>
+    <string name="package_name" translatable="false">com.test.nativebridge</string>
+    <string name="leaderboard_id" translatable="false">CggInuXP1k8QAhAB</string>
+</resources>
