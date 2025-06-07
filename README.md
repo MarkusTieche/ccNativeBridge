@@ -1,6 +1,10 @@
 # CC2 NativeBridge
-A Native helper for CocosCreater 2.4+. Implementation of AdMob,GameCenter,AppRating,ConsentRequest etc.
-Easy to configure and enhance.
+A Native helper for CocosCreater 2.4+. Implementation of AdMob,GameCenter,AppRating,ConsentRequest.
+Easy to configure and enhance. 
+
+All necessary files are in the NativeBridge folder.
+
+<p align= "center"><img style="width:150px;border-radius:15px;" src="assets/icon.png"></p>
 
 ## ANDROID
 ### Preparation
@@ -76,10 +80,12 @@ Add to "Buildsettings/Header Search Paths" for debug and release
     
     $(inherited)
 
-Change "Project/Info" Based on Configuration File to PodsFile
+Change "Project/Info"/"Configurations/Based on Configuration" File to PodsFile for release and debug. Clean build folder if any error occure.
 
 Update your app's Info.plist file to add two keys:
     
+https://developers.google.com/admob/ios/quick-start
+
     <key>GADApplicationIdentifier</key>
         <string>ca-app-pub-3940256099942544~1458002511</string>
     <key>SKAdNetworkItems</key>
@@ -89,17 +95,33 @@ Update your app's Info.plist file to add two keys:
             <string>cstr6suwn9.skadnetwork</string>
         </dict>
     </array>
-https://developers.google.com/admob/ios/quick-start
 
 
 Copy Files
+
     Copy idValues.xml to project folder
-    Copy adController.h & adController.m to project (includes adMob)
+    Copy adController.h & adController.m to project //adMob
+    Copy appRating.h & appRating.m to project //appRating
+    Copy gameCenter.h & gameCenter.m to project //Gamecenter/Leaderboard
+
+Add dependencies in your xCode project     
     
     add gemaceenter in "Signing & Capabilits" tab
-    add gemekit in "General" tab under Frameworks,Libraries
+    add gemekit.framework in "General" tab under Frameworks,Libraries
+
+Import adController in AppController.mm
+    
+    //IMPLEMENT ADCONTROLLER/Admob
+    #import "adController.h"
+
+Add to AppController.mm in the onCreate function
+        
+    //Init ADCONTROLLER/Admob
+    [[adController alloc] init];
 
 ## Use in CocosCreator
+Copy NativeBridge.js to your CocosCreator Project. It is highliy recommended to call requestConsent() early on startUp.
+
 Call function in any script
 
     NativeBridge.showBanner();

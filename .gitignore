@@ -49,3 +49,5 @@ Thumbs.db
 #//////////////////////////
 
 .vscode/
+build/jsb-link/frameworks/runtime-src/proj.ios_mac/idValues.plist
+build/jsb-link/frameworks/runtime-src/proj.ios_mac/idValues.plist

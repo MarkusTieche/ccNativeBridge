@@ -28,21 +28,29 @@ static NSDictionary *idValues = nil;
 }
 
 - (instancetype)init {
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"idValues" ofType:@"plist"];
+    idValues = [[NSDictionary dictionaryWithContentsOfFile:path]retain];
+    
     if (self = [super init]) {
-        NSString *path = [[NSBundle mainBundle] pathForResource:@"idValues" ofType:@"plist"];
-        idValues = [NSDictionary dictionaryWithContentsOfFile:path];
         
         self.rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+        NSLog(@"AdMob initialized (or already initialized).");
+        [[GADMobileAds sharedInstance] startWithCompletionHandler:^(GADInitializationStatus *status) {
+                   NSLog(@"AdMob initialized (or already initialized).");
 
-        [[GADMobileAds sharedInstance] startWithCompletionHandler:nil];
+                   // Run on main thread for UI safety
+                   dispatch_async(dispatch_get_main_queue(), ^{
+                       [self loadInterstitial];
+                       [self loadRewardedAd];
+                   });
+               }];
+
 
         // Test device ID for simulator
         GADMobileAds.sharedInstance.requestConfiguration.testDeviceIdentifiers = @[ GADSimulatorID ];
         
-
-        [self loadInterstitial];
-        [self loadRewardedAd];
     }
+    
     return self;
 }
 
@@ -122,7 +130,7 @@ static NSDictionary *idValues = nil;
         [self.bannerView removeFromSuperview];
         self.bannerView = nil;
     }
-    GADAdSize adSize = GADAdSizeLargeBanner;//BANNERSIZE
+    GADAdSize adSize = [self adSizeFromPlist];//BANNERSIZE
     
     CGRect screenBounds = [UIScreen mainScreen].bounds;
     self.bannerView = [[GADBannerView alloc] initWithAdSize:adSize];
@@ -149,6 +157,26 @@ static NSDictionary *idValues = nil;
     }
 }
 
+- (GADAdSize)adSizeFromPlist {
+    NSString *sizeString = idValues[@"BannerSize"];
+
+    if ([sizeString isEqualToString:@"GADAdSizeLargeBanner"]) {
+        return GADAdSizeLargeBanner;
+    } else if ([sizeString isEqualToString:@"GADAdSizeMediumRectangle"]) {
+        return GADAdSizeMediumRectangle;
+    } else if ([sizeString isEqualToString:@"GADAdSizeFullBanner"]) {
+        return GADAdSizeFullBanner;
+    } else if ([sizeString isEqualToString:@"GADAdSizeLeaderboard"]) {
+        return GADAdSizeLeaderboard;
+    } else if ([sizeString isEqualToString:@"Adaptive"]) {
+        CGFloat width = CGRectGetWidth([UIScreen mainScreen].bounds);
+        return GADCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(width);
+    } else {
+        // Default fallback
+        return GADAdSizeBanner;
+    }
+}
+
 #pragma mark - Interstitial
 
 - (void)loadInterstitial {
@@ -160,6 +188,7 @@ static NSDictionary *idValues = nil;
             NSLog(@"Failed to load interstitial: %@", error.localizedDescription);
             return;
         }
+        NSLog(@"Interstitial ad ready.");
         self.interstitial = ad;
         self.interstitial.fullScreenContentDelegate = self;
     }];
