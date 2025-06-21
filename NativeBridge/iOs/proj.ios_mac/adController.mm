@@ -47,7 +47,7 @@ static NSDictionary *idValues = nil;
 
 
         // Test device ID for simulator
-        GADMobileAds.sharedInstance.requestConfiguration.testDeviceIdentifiers = @[ GADSimulatorID ];
+        //GADMobileAds.sharedInstance.requestConfiguration.testDeviceIdentifiers = @[ GADSimulatorID ];
         
     }
     
